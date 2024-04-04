@@ -30,7 +30,7 @@ resource "aws_security_group" "sg_8080" {
 }
 
 resource "aws_instance" "example" {
-  ami                    = data.aws_ami.ubuntu.id
+  ami                    = data.aws_ami.amazon_linux.id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.sg_8080.id]
   user_data              = <<-EOF
