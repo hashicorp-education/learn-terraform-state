@@ -2,20 +2,15 @@ provider "aws" {
   region = var.aws_region
 }
 
-data "aws_ami" "ubuntu" {
+
+data "aws_ami" "amazon_linux" {
   most_recent = true
+  owners      = ["amazon"]
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
 }
 
 data "terraform_remote_state" "root" {
@@ -27,7 +22,7 @@ data "terraform_remote_state" "root" {
 }
 
 resource "aws_instance" "example_new" {
-  ami                    = data.aws_ami.ubuntu.id
+  ami                    = data.aws_ami.amazon_linux.id
   instance_type          = "t2.micro"
   vpc_security_group_ids = [data.terraform_remote_state.root.outputs.security_group]
   user_data              = <<-EOF
